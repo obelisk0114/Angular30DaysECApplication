@@ -82,13 +82,27 @@ export class ProductListComponent implements OnInit {
     console.log(5/3);
     console.log(this.route.routeConfig);
 
-    this.retrieveProductsService.getProducts().subscribe({
-      next: productLists => {
-        this.productLists = productLists;
-        this.filteredProduct = this.productLists;
-      },
-      error: err => this.errorMessage = err
-    });
+    if (!type) {
+      return;
+    }
+    else if (type === 'all') {
+      this.retrieveProductsService.getProducts().subscribe({
+        next: productLists => {
+          this.productLists = productLists;
+          this.filteredProduct = this.productLists;
+        },
+        error: err => this.errorMessage = err
+      });
+    }
+    else {
+      this.retrieveProductsService.getProductsByType(type).subscribe({
+        next: productLists => {
+          this.productLists = productLists;
+          this.filteredProduct = this.productLists;
+        },
+        error: err => this.errorMessage = err
+      });
+    }
 
   }
 
