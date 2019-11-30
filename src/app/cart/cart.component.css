@@ -54,18 +54,6 @@
     margin-right: 39px;
   }
   
-  .container article .cart-item:first-child > p:first-child {
-    background-image: url(/assets/images/others/brenda-godinez-367708-unsplash.jpg);
-  }
-  
-  .container article .cart-item:nth-child(2) > p:first-child {
-    background-image: url(/assets/images/others/food-photographer-jennifer-pallian-650641-unsplash.jpg);
-  }
-  
-  .container article .cart-item:last-child > p:first-child {
-    background-image: url(/assets/images/others/brooke-lark-96398-unsplash.jpg);
-  }
-  
   .container article .cart-item .description {
     height: 110px;
     width: 107px;

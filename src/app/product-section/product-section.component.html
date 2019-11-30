@@ -1,3 +1,29 @@
-<p>product-section works!</p>
+<!-- <div class="mobile"></div> -->
 
-<router-outlet></router-outlet>
+<!-- 主要 Banner 區域開始 -->
+<div class="banner">
+    <img src="../assets/images/logo/lg-想吃甜點是不需要理由的.svg" alt="想吃甜點是不需要理由的 slogan">
+</div>
+<!-- 主要 Banner 區域結束 -->
+
+<div class="container">
+
+    <!-- 甜點類別區域開始 -->
+    <aside>
+        <h3 class="bg-dark-green font-light-green">甜點類別</h3>
+        <ul class="font-dark-green">
+            <li>所有甜點（48）</li>
+            <li>本日精選（10）</li>
+            <li>人氣推薦（26）</li>
+            <li>新品上市（12）</li>
+        </ul>
+    </aside>
+    <!-- 甜點類別區域結束 -->
+
+    <!-- 商品區域開始 -->
+    <article>
+        <app-product-list></app-product-list>
+    </article>
+    <!-- 商品區域結束 -->
+
+</div>
