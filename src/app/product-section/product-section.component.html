@@ -12,17 +12,17 @@
     <aside>
         <h3 class="bg-dark-green font-light-green">甜點類別</h3>
         <ul class="font-dark-green">
-            <li>所有甜點（48）</li>
-            <li>本日精選（10）</li>
-            <li>人氣推薦（26）</li>
-            <li>新品上市（12）</li>
+            <li><a [routerLink]="[productType.all]">所有甜點（48）</a></li>
+            <li><a [routerLink]="[productType.today]">本日精選（10）</a></li>
+            <li><a [routerLink]="[productType.popular]">人氣推薦（26）</a></li>
+            <li><a [routerLink]="[productType.new]">新品上市（12）</a></li>
         </ul>
     </aside>
     <!-- 甜點類別區域結束 -->
 
     <!-- 商品區域開始 -->
     <article>
-        <app-product-list></app-product-list>
+        <router-outlet></router-outlet>
     </article>
     <!-- 商品區域結束 -->
 

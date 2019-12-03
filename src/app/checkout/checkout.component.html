@@ -37,6 +37,7 @@
     <div class="order-list">
 
       <h4 style="text-align:center" *ngIf="selectedProducts.length === 0">您的購物車為空</h4>
+      
       <div class="order-item" *ngFor="let product of selectedProducts">
 
         <div class="img" [style.backgroundImage]="'url(/assets/images/others/' + product.imageUrl + ')'"></div>

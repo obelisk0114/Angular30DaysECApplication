@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { IProduct, ProductEntity } from '../product';
+import { IProduct } from '../product';
 import { RetrieveProductsService } from '../retrieve-products.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { productType } from '../product-type.const';
 
 @Component({
   selector: 'app-product-list',
@@ -10,12 +11,20 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
+
+  productType = productType;
+
   /**
-   * Will get all products from backend
+   * Will get certain type of products from backend
    */
   productLists: IProduct[] = [];
 
-  filteredProduct = [
+  /**
+   * products in this page
+   */
+  filteredProduct: IProduct[] = [];
+
+  defaultProducts = [
     {
       id: 1,
       type: 'today',
@@ -60,59 +69,138 @@ export class ProductListComponent implements OnInit {
     }
   ];
 
-  type = 'default';
-  productPerPage = 6;
-  errorMessage: string;
+  isEmpty = false;       // product list is empty or not
+  productPerPage = 6;    // max quantity of products per page
+  currentPage = 1;
+  pagination: number[] = [];
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
-              private retrieveProductsService: RetrieveProductsService) { }
+    private router: Router,
+    private retrieveProductsService: RetrieveProductsService) { }
 
   ngOnInit() {
-    /// TODO: define productLists
-    let type;
-    let proto = this.route.paramMap.subscribe(
-      params => {
-        type = params.get('type');
-      }
-    ); 
+    /// TODO: 左側切換甜點種類 bug
     //let type = this.route.snapshot.paramMap.get('type');
-    //console.log(proto);
+    let type: string;
+    this.route.params.subscribe(routeParams => type = routeParams.type);
     console.log(type);
-    console.log(5/3);
-    console.log(this.route.routeConfig);
 
-    if (!type) {
-      return;
+    let queryPage = this.route.snapshot.queryParamMap.get('page');
+    if (queryPage) {
+      this.currentPage = +queryPage;
     }
-    else if (type === 'all') {
+
+    // 以 "六角學院" 在 product 頁面呈現的 6 張圖做為預設 product，網址為 /products 時使用
+    if (type === this.productType.default) {
+      this.productLists = this.defaultProducts;
+      this.filteredProduct = this.productLists;
+    }
+    else if (type === this.productType.all) {
       this.retrieveProductsService.getProducts().subscribe({
-        next: productLists => {
-          this.productLists = productLists;
-          this.filteredProduct = this.productLists;
-        },
-        error: err => this.errorMessage = err
+        next: productLists => this.setProductListPage(productLists)
       });
     }
     else {
       this.retrieveProductsService.getProductsByType(type).subscribe({
-        next: productLists => {
-          this.productLists = productLists;
-          this.filteredProduct = this.productLists;
-        },
-        error: err => this.errorMessage = err
+        next: productLists => this.setProductListPage(productLists)
       });
     }
 
   }
 
-  setType(type: string): void {
-    this.type = type;
-    this.setFilteredProduct(type);
+  /**
+   * Set productLists, isEmpty, pagination
+   * 
+   * @param {IProduct[]} productLists - used to set productLists variable
+   * @memberof ProductListComponent 
+   */
+  setProductListPage(productLists: IProduct[]): void {
+    this.productLists = productLists;
+    this.setFilteredProduct();
+
+    if (this.productLists.length === 0) {
+      this.isEmpty = true;
+    }
+    else {
+      this.isEmpty = false;
+
+      for (let i = 0; i < Math.ceil(this.productLists.length / this.productPerPage); i++) {
+        this.pagination.push(i + 1);
+      }
+    }
   }
 
-  setFilteredProduct(type: string): void {
-    this.filteredProduct = this.productLists.filter(product => product.type === type);
+  /**
+   * Set filteredProduct (products in this page)
+   * 
+   * @memberof ProductListComponent
+   */
+  setFilteredProduct(): void {
+    this.filteredProduct.splice(0, this.filteredProduct.length);
+
+    let start = (this.currentPage - 1) * this.productPerPage;
+    let end = Math.min(this.currentPage * this.productPerPage, this.productLists.length);
+    for (let i = start; i < end; i++) {
+      this.filteredProduct.push(this.productLists[i]);
+    }
+  }
+
+  /**
+   * Change page and set products in this page
+   * 
+   * @param {HTMLElement} pageRef - page element
+   * @memberof ProductListComponent
+   */
+  changePage(pageRef: HTMLElement): void {
+    let content = pageRef.textContent;
+
+    if (content === 'arrow_left') {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+      else {
+        return;
+      }
+    }
+    else if (content === 'arrow_right') {
+      if (this.currentPage < Math.ceil(this.productLists.length / this.productPerPage)) {
+        this.currentPage++;
+      }
+      else {
+        return;
+      }
+    }
+    else {
+      this.currentPage = +content;
+    }
+
+    this.router.navigate(['.'], {
+      queryParams: {
+        page: this.currentPage
+      },
+      relativeTo: this.route
+    });
+    this.setFilteredProduct();
+
+  }
+
+  /**
+   * Check the page is current page or not
+   * 
+   * @param {number} page - page in DOM
+   * @memberof ProductListComponent
+   */
+  isCurrentPage(page: number): boolean {
+    return page === this.currentPage;
+  }
+
+  isBoundary(arrow: string): boolean {
+    if (arrow === 'left') {
+      return this.currentPage === 1;
+    }
+    else {
+      return this.currentPage === Math.ceil(this.productLists.length / this.productPerPage);
+    }
   }
 
 }

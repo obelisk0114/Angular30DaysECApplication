@@ -12,6 +12,11 @@ const routes: Routes = [
       {
         path: ':type',
         component: ProductListComponent
+      },
+      {
+        path: '',
+        redirectTo: 'default',
+        pathMatch: 'full'
       }
     ]
   }

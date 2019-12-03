@@ -35,7 +35,19 @@ app-product-item:nth-child(2n+1) {
   border: solid 1px #EAF0ED;
   cursor: pointer;
 }
-  
+
+.pagination ul .current {
+  background-color: rgb(47, 73, 52);
+  border-top-color: rgb(47, 73, 52);
+  color: #EAF0ED;
+}
+
+.pagination ul .boundary {
+  background-color: rgb(128,128,128);
+  border-top-color: rgb(128,128,128);
+  color: #EAF0ED;
+}
+
 .pagination ul li:hover,
 .pagination ul li:active {
   background-color: #3F5D45;

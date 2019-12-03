@@ -8,6 +8,7 @@
       <div class="cart-list">
 
         <h3 style="text-align:center" *ngIf="selectedProducts.length === 0">您的購物車為空</h3>
+        
         <div class="cart-item" *ngFor="let product of selectedProducts; let i = index">
 
           <p class="img" [style.backgroundImage]="'url(/assets/images/others/' + product.imageUrl + ')'"></p>

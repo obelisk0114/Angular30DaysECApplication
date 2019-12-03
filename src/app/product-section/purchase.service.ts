@@ -43,7 +43,7 @@ export class PurchaseService {
   /**
    * 若 selectedProducts 為空，將預設值賦予它
    * 
-   * @memberof ProductService
+   * @memberof PurchaseService
    */
   setSelectedProduct(): void {
     if (this.selectedProducts.length === 0) {
@@ -59,7 +59,7 @@ export class PurchaseService {
    * 尋找產品位置
    * 
    * @param {number} productId - id of the product
-   * @memberof ProductService
+   * @memberof PurchaseService
    */
   findProductPosition(productId: number): number {
     let target = this.selectedProducts.findIndex((p: IProduct) => p.id === productId);
@@ -70,7 +70,7 @@ export class PurchaseService {
    * 加入產品
    * 
    * @param {IProduct} product - 想加入的產品
-   * @memberof ProductService
+   * @memberof PurchaseService
    */
   addProduct(product: IProduct): void {
     this.selectedProducts.push(product);
@@ -83,7 +83,7 @@ export class PurchaseService {
    * 移除所選的產品
    * 
    * @param {number} index - position in the array
-   * @memberof ProductService
+   * @memberof PurchaseService
    */
   removeProduct(index: number): void {
     this.price = this.price - this.selectedProducts[index].price * this.selectedProducts[index].quantity;
@@ -97,7 +97,7 @@ export class PurchaseService {
   /**
    * 移除數量為 0 的產品
    * 
-   * @memberof ProductService
+   * @memberof PurchaseService
    */
   removeZeroProduct(): void {
     this.selectedProducts = this.selectedProducts.filter((product: IProduct) => product.quantity > 0);
@@ -108,7 +108,7 @@ export class PurchaseService {
    * 
    * @param {number} index - 產品在 array 中的位置
    * @param {number} quantity - 欲改變的數量
-   * @memberof ProductService
+   * @memberof PurchaseService
    */
   changeProductQuantity(index: number, quantity: number): void {
     let updatedQuantity = this.selectedProducts[index].quantity + quantity
