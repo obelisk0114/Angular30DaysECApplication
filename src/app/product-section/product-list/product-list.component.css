@@ -46,6 +46,7 @@ app-product-item:nth-child(2n+1) {
   background-color: rgb(128,128,128);
   border-top-color: rgb(128,128,128);
   color: #EAF0ED;
+  cursor: not-allowed;
 }
 
 .pagination ul li:hover,

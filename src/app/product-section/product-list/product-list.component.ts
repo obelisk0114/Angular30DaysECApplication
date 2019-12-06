@@ -79,33 +79,35 @@ export class ProductListComponent implements OnInit {
     private retrieveProductsService: RetrieveProductsService) { }
 
   ngOnInit() {
-    /// TODO: 左側切換甜點種類 bug
-    //let type = this.route.snapshot.paramMap.get('type');
-    let type: string;
-    this.route.params.subscribe(routeParams => type = routeParams.type);
-    console.log(type);
+    this.route.params.subscribe((routeParams) => {
+      const type = routeParams.type;
 
-    let queryPage = this.route.snapshot.queryParamMap.get('page');
-    if (queryPage) {
-      this.currentPage = +queryPage;
-    }
-
-    // 以 "六角學院" 在 product 頁面呈現的 6 張圖做為預設 product，網址為 /products 時使用
-    if (type === this.productType.default) {
-      this.productLists = this.defaultProducts;
-      this.filteredProduct = this.productLists;
-    }
-    else if (type === this.productType.all) {
-      this.retrieveProductsService.getProducts().subscribe({
-        next: productLists => this.setProductListPage(productLists)
-      });
-    }
-    else {
-      this.retrieveProductsService.getProductsByType(type).subscribe({
-        next: productLists => this.setProductListPage(productLists)
-      });
-    }
-
+      // 以 "六角學院" 在 product 頁面呈現的 6 張圖做為預設 product，網址為 /products 時使用
+      if (type === this.productType.default) {
+        this.productLists = this.defaultProducts;
+        this.filteredProduct = this.productLists;
+      }
+      else if (type === this.productType.all) {
+        this.retrieveProductsService.getProducts().subscribe({
+          next: productLists => this.setProductListPage(productLists)
+        });
+      }
+      else {
+        this.retrieveProductsService.getProductsByType(type).subscribe({
+          next: productLists => this.setProductListPage(productLists)
+        });
+      }
+    });
+    
+    this.route.queryParamMap.subscribe((paramMap) => {
+      const queryPage = paramMap.get('page');
+      if (queryPage) {
+        this.currentPage = +queryPage;
+      }
+      else {
+        this.currentPage = 1;
+      }
+    });
   }
 
   /**
@@ -124,6 +126,7 @@ export class ProductListComponent implements OnInit {
     else {
       this.isEmpty = false;
 
+      this.pagination.splice(0, this.pagination.length);
       for (let i = 0; i < Math.ceil(this.productLists.length / this.productPerPage); i++) {
         this.pagination.push(i + 1);
       }
@@ -181,7 +184,6 @@ export class ProductListComponent implements OnInit {
       relativeTo: this.route
     });
     this.setFilteredProduct();
-
   }
 
   /**
