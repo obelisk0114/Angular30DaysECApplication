@@ -75,8 +75,8 @@ export class ProductListComponent implements OnInit {
   pagination: number[] = [];
 
   constructor(private route: ActivatedRoute,
-    private router: Router,
-    private retrieveProductsService: RetrieveProductsService) { }
+              private router: Router,
+              private retrieveProductsService: RetrieveProductsService) { }
 
   ngOnInit() {
     this.route.params.subscribe((routeParams) => {
@@ -103,6 +103,12 @@ export class ProductListComponent implements OnInit {
       const queryPage = paramMap.get('page');
       if (queryPage) {
         this.currentPage = +queryPage;
+
+        if (this.currentPage < 1) {
+          this.router.navigate(['.'], {
+            relativeTo: this.route
+          });
+        }
       }
       else {
         this.currentPage = 1;
@@ -113,7 +119,7 @@ export class ProductListComponent implements OnInit {
   /**
    * Set productLists, isEmpty, pagination
    * 
-   * @param {IProduct[]} productLists - used to set productLists variable
+   * @param {IProduct[]} productLists - used to set productLists property
    * @memberof ProductListComponent 
    */
   setProductListPage(productLists: IProduct[]): void {
@@ -158,7 +164,7 @@ export class ProductListComponent implements OnInit {
     let content = pageRef.textContent;
 
     if (content === 'arrow_left') {
-      if (this.currentPage > 1) {
+      if (!this.isBoundary('left')) {
         this.currentPage--;
       }
       else {
@@ -166,7 +172,7 @@ export class ProductListComponent implements OnInit {
       }
     }
     else if (content === 'arrow_right') {
-      if (this.currentPage < Math.ceil(this.productLists.length / this.productPerPage)) {
+      if (!this.isBoundary('right')) {
         this.currentPage++;
       }
       else {
@@ -198,10 +204,10 @@ export class ProductListComponent implements OnInit {
 
   isBoundary(arrow: string): boolean {
     if (arrow === 'left') {
-      return this.currentPage === 1;
+      return this.currentPage <= 1;
     }
     else {
-      return this.currentPage === Math.ceil(this.productLists.length / this.productPerPage);
+      return this.currentPage >= Math.ceil(this.productLists.length / this.productPerPage);
     }
   }
 
