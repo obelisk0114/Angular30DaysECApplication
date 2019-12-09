@@ -4,6 +4,8 @@ import { IProduct } from '../product';
 import { RetrieveProductsService } from '../retrieve-products.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { productType } from '../product-type.const';
+import { startWith } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
@@ -72,35 +74,24 @@ export class ProductListComponent implements OnInit {
   isEmpty = false;       // product list is empty or not
   productPerPage = 6;    // max quantity of products per page
   currentPage = 1;
-  pagination: number[] = [];
+  pagination: (string | number)[] = [];
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private retrieveProductsService: RetrieveProductsService) { }
 
   ngOnInit() {
-    this.route.params.subscribe((routeParams) => {
+    let routePath = this.route.params;
+    let routeQuery = this.route.queryParamMap;
+    
+    let routeQueryStart = routeQuery.pipe(startWith());
+
+    combineLatest(routePath, routeQueryStart).subscribe(latestValues => {
+      const [routeParams, routeQueryParamMap] = latestValues;
+
+      const queryPage = routeQueryParamMap.get('page');
       const type = routeParams.type;
 
-      // 以 "六角學院" 在 product 頁面呈現的 6 張圖做為預設 product，網址為 /products 時使用
-      if (type === this.productType.default) {
-        this.productLists = this.defaultProducts;
-        this.filteredProduct = this.productLists;
-      }
-      else if (type === this.productType.all) {
-        this.retrieveProductsService.getProducts().subscribe({
-          next: productLists => this.setProductListPage(productLists)
-        });
-      }
-      else {
-        this.retrieveProductsService.getProductsByType(type).subscribe({
-          next: productLists => this.setProductListPage(productLists)
-        });
-      }
-    });
-    
-    this.route.queryParamMap.subscribe((paramMap) => {
-      const queryPage = paramMap.get('page');
       if (queryPage) {
         this.currentPage = +queryPage;
 
@@ -112,6 +103,22 @@ export class ProductListComponent implements OnInit {
       }
       else {
         this.currentPage = 1;
+      }
+
+      // 以 "六角學院" 在 product 頁面呈現的 6 張圖做為預設 product，網址為 /products 時使用
+      if (type === this.productType.default) {
+        this.productLists = this.defaultProducts;
+        this.filteredProduct = this.productLists;
+      }
+      else if (type === this.productType.all) {
+        this.retrieveProductsService.getProducts().subscribe((productLists) => {
+          this.setProductListPage(productLists);
+        });
+      }
+      else {
+        this.retrieveProductsService.getProductsByType(type).subscribe({
+          next: productLists => this.setProductListPage(productLists)
+        });
       }
     });
   }
