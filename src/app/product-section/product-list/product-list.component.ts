@@ -83,7 +83,7 @@ export class ProductListComponent implements OnInit {
   ngOnInit() {
     let routePath = this.route.params;
     let routeQuery = this.route.queryParamMap;
-    
+
     let routeQueryStart = routeQuery.pipe(startWith());
 
     combineLatest(routePath, routeQueryStart).subscribe(latestValues => {
@@ -95,7 +95,7 @@ export class ProductListComponent implements OnInit {
       if (queryPage) {
         if (+queryPage) {
           this.currentPage = +queryPage;
-  
+
           if (this.currentPage < 1) {
             this.router.navigate(['.'], {
               relativeTo: this.route
@@ -131,7 +131,7 @@ export class ProductListComponent implements OnInit {
   }
 
   /**
-   * Set productLists, isEmpty, pagination
+   * Set productLists, isEmpty
    * 
    * @param {IProduct[]} productLists - used to set productLists property
    * @memberof ProductListComponent 
@@ -145,11 +145,7 @@ export class ProductListComponent implements OnInit {
     }
     else {
       this.isEmpty = false;
-
-      this.pagination.splice(0, this.pagination.length);
-      for (let i = 0; i < Math.ceil(this.productLists.length / this.productPerPage); i++) {
-        this.pagination.push(i + 1);
-      }
+      this.setPagination();
     }
   }
 
@@ -169,6 +165,70 @@ export class ProductListComponent implements OnInit {
   }
 
   /**
+   * Set pagination
+   * 
+   * ex: lastPage = 10
+   * current page = 1 => 1, 2, 3, ..., 10
+   * current page = 2 => 1, 2, 3, ..., 10
+   * current page = 3 => 1, 2, 3, 4, ..., 10
+   * current page = 8 => 1, ..., 7, 8, 9, 10
+   * current page = 9 => 1, ..., 8, 9, 10
+   * current page = 10 => 1, ..., 8, 9, 10
+   * 
+   * current page = 5 => 1, ..., 4, 5, 6, ..., 10
+   * 
+   * @memberof ProductListComponent
+   */
+  setPagination(): void {
+    this.pagination.splice(0, this.pagination.length);
+    let lastPage = Math.ceil(this.productLists.length / this.productPerPage);
+
+    if (lastPage <= 7) {
+      for (let i = 0; i < lastPage; i++) {
+        this.pagination.push(i + 1);
+      }
+    }
+    else {
+      this.pagination.push(1);
+
+      switch (this.currentPage) {
+        case 1:   // fall through
+        case 2:
+          this.pagination.push(2);
+          this.pagination.push(3);
+          this.pagination.push('...');
+          break
+        case (lastPage - 1):   // fall through
+        case lastPage:
+          this.pagination.push('...');
+          this.pagination.push(lastPage - 2);
+          this.pagination.push(lastPage - 1);
+          break;
+        case 3:
+          this.pagination.push(2);
+          this.pagination.push(3);
+          this.pagination.push(4);
+          this.pagination.push('...');
+          break;
+        case (lastPage - 2):
+          this.pagination.push('...');
+          this.pagination.push(lastPage - 3);
+          this.pagination.push(lastPage - 2);
+          this.pagination.push(lastPage - 1);
+          break;
+        default:
+          this.pagination.push('...');
+          this.pagination.push(this.currentPage - 1);
+          this.pagination.push(this.currentPage);
+          this.pagination.push(this.currentPage + 1);
+          this.pagination.push('...');
+      }
+
+      this.pagination.push(lastPage);
+    }
+  }
+
+  /**
    * Change page and set products in this page
    * 
    * @param {HTMLElement} pageRef - page element
@@ -176,6 +236,9 @@ export class ProductListComponent implements OnInit {
    */
   changePage(pageRef: HTMLElement): void {
     let content = pageRef.textContent;
+
+    // console.log("textContent = '" + pageRef.textContent + "'");   # 印出 textContent = '... '
+    // console.log("innerText = '" + pageRef.innerText + "'");       # 印出 innerText = '...'
 
     if (content === 'arrow_left') {
       if (!this.isBoundary('left')) {
@@ -193,6 +256,9 @@ export class ProductListComponent implements OnInit {
         return;
       }
     }
+    else if (content === '... ') {
+      return;
+    }
     else {
       this.currentPage = +content;
     }
@@ -203,7 +269,9 @@ export class ProductListComponent implements OnInit {
       },
       relativeTo: this.route
     });
+
     this.setFilteredProduct();
+    this.setPagination();
   }
 
   /**
