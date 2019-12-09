@@ -8,7 +8,7 @@ import { catchError, retryWhen, delay, map } from 'rxjs/operators';
 export class HttpErrorInterceptor implements HttpInterceptor {
 
   delayTime = 3000;
-  maxRetry = 5;
+  maxRetry = 3;
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 

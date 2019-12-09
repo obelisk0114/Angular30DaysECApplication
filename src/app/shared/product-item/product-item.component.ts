@@ -47,8 +47,11 @@ export class ProductItemComponent implements OnInit {
       case "new": {
         return "新品上市";
       }
-      default: {
+      case "": {
         return "";
+      }
+      default: {
+        return "This is test.";
       }
     }
 

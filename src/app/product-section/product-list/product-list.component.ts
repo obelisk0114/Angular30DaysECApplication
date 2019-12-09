@@ -93,9 +93,16 @@ export class ProductListComponent implements OnInit {
       const type = routeParams.type;
 
       if (queryPage) {
-        this.currentPage = +queryPage;
-
-        if (this.currentPage < 1) {
+        if (+queryPage) {
+          this.currentPage = +queryPage;
+  
+          if (this.currentPage < 1) {
+            this.router.navigate(['.'], {
+              relativeTo: this.route
+            });
+          }
+        }
+        else {
           this.router.navigate(['.'], {
             relativeTo: this.route
           });
