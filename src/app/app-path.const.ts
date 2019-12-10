@@ -32,4 +32,4 @@ export const appPath = {
     // 結帳成功
     success: 'success'
   
-  };
+};

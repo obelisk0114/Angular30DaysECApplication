@@ -35,7 +35,7 @@ export class ProductListComponent implements OnInit {
       imageUrl: 'brenda-godinez-228182-unsplash.jpg'
     },
     {
-      id: 9,
+      id: 8,
       type: 'today',
       name: '糖衣甜甜圈',
       price: 50,
@@ -56,7 +56,7 @@ export class ProductListComponent implements OnInit {
       imageUrl: 'food-photographer-jennifer-pallian-137621-unsplash.jpg'
     },
     {
-      id: 8,
+      id: 7,
       type: 'today',
       name: '覆盆子蛋糕',
       price: 150,

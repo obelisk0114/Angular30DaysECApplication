@@ -5,8 +5,6 @@ export interface IProduct {
   price: number;
   imageUrl: string;
   quantity?: number;
-
-  isEqual?(p1: IProduct, p2: IProduct): boolean;
 }
 
 export class ProductEntity implements IProduct {
