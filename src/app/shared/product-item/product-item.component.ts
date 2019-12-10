@@ -12,24 +12,21 @@ export class ProductItemComponent implements OnInit {
 
   constructor(private purchaseService: PurchaseService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   addCart(element: IProduct): void {
     // 之後看能不能改成有圖的對話窗
     let decision = prompt(`${element.name}\nNT$ ${element.price}\n\n購買數量`, "1");
     let quantity: number = +decision;
     if (quantity > 0) {
-
-      let idx: number = this.purchaseService.findProductPosition(element.id);
-      if (idx === -1) {
+      if (!this.purchaseService.selectedProducts.has(element.id)) {
         let product: IProduct = new ProductEntity(element.id, element.type, element.name, element.price, element.imageUrl);
         product.quantity = quantity;
     
         this.purchaseService.addProduct(product);
       }
       else {
-        this.purchaseService.changeProductQuantity(idx, quantity);
+        this.purchaseService.changeProductQuantity(element.id, quantity);
       }
     }
 

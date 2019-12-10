@@ -17,36 +17,35 @@ export class CartComponent implements OnInit {
    */
   path = appPath;
 
-  selectedProducts: IProduct[];
+  selectedProducts: Map<number, IProduct>;
   price: number;
   shipping: number;
 
   constructor(private purchaseService: PurchaseService) { }
 
   ngOnInit() {
-    this.selectedProducts = this.purchaseService.selectedProducts;
-
-    if (this.selectedProducts.length === 0) {
+    if (this.purchaseService.selectedProducts.size === 0) {
       this.purchaseService.setSelectedProduct();
-      this.selectedProducts = this.purchaseService.selectedProducts;
     }
+    this.selectedProducts = this.purchaseService.selectedProducts;
     this.price = this.purchaseService.price;
     this.shipping = this.purchaseService.shipping;
   }
 
   /**
    * 
-   * @param index position in the array
+   * @param productId id of the product
+   * @memberof CartComponent
    */
-  removeProduct(index: number): void {
-    this.purchaseService.removeProduct(index);
+  removeProduct(productId: number): void {
+    this.purchaseService.removeProduct(productId);
     this.selectedProducts = this.purchaseService.selectedProducts;
     this.price = this.purchaseService.price;
     this.shipping = this.purchaseService.shipping;
   }
 
-  changeProductQuantity(index: number, quantity: number): void {
-    this.purchaseService.changeProductQuantity(index, quantity);
+  changeProductQuantity(productId: number, quantity: number): void {
+    this.purchaseService.changeProductQuantity(productId, quantity);
     this.selectedProducts = this.purchaseService.selectedProducts;
     this.price = this.purchaseService.price;
     this.shipping = this.purchaseService.shipping;

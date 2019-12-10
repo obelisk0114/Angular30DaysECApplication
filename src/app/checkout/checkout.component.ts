@@ -16,13 +16,12 @@ export class CheckoutComponent implements OnInit {
   constructor(private purchaseService: PurchaseService) { }
 
   ngOnInit() {
-    if (this.purchaseService.selectedProducts.length === 0) {
+    if (this.purchaseService.selectedProducts.size === 0) {
       this.purchaseService.setSelectedProduct();
-      this.selectedProducts = this.purchaseService.selectedProducts;
     }
 
     this.purchaseService.removeZeroProduct();
-    this.selectedProducts = this.purchaseService.selectedProducts;
+    this.selectedProducts = Array.from(this.purchaseService.selectedProducts.values());
 
     this.price = this.purchaseService.price;
     this.shipping = this.purchaseService.shipping;

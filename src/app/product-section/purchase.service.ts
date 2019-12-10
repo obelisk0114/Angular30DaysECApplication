@@ -5,7 +5,7 @@ import { IProduct } from './product';
   providedIn: 'root'
 })
 export class PurchaseService {
-  selectedProducts: IProduct[] = [];
+  selectedProducts: Map<number, IProduct> = new Map<number, IProduct>();
 
   defaultSelected = [
     {
@@ -17,7 +17,7 @@ export class PurchaseService {
       quantity: 2
     },
     {
-      id: 8,
+      id: 7,
       type: 'today',
       name: '覆盆子蛋糕',
       price: 150,
@@ -34,7 +34,6 @@ export class PurchaseService {
     }
   ];
 
-  /// TODO: 之後用 Map 重新架構
   price = 0;
   shipping = 300;
   
@@ -46,24 +45,12 @@ export class PurchaseService {
    * @memberof PurchaseService
    */
   setSelectedProduct(): void {
-    if (this.selectedProducts.length === 0) {
-      this.selectedProducts = this.defaultSelected;
-
+    if (this.selectedProducts.size === 0) {
       for (let p of this.defaultSelected) {
+        this.selectedProducts.set(p.id, p);
         this.price = this.price + p.price * p.quantity; 
       }
     }
-  }
-
-  /**
-   * 尋找產品位置
-   * 
-   * @param {number} productId - id of the product
-   * @memberof PurchaseService
-   */
-  findProductPosition(productId: number): number {
-    let target = this.selectedProducts.findIndex((p: IProduct) => p.id === productId);
-    return target;
   }
 
   /**
@@ -73,7 +60,7 @@ export class PurchaseService {
    * @memberof PurchaseService
    */
   addProduct(product: IProduct): void {
-    this.selectedProducts.push(product);
+    this.selectedProducts.set(product.id, product);
     
     this.price = this.price + product.price * product.quantity;
     this.shipping = 300;
@@ -82,12 +69,12 @@ export class PurchaseService {
   /**
    * 移除所選的產品
    * 
-   * @param {number} index - position in the array
+   * @param {number} productId - id of the product
    * @memberof PurchaseService
    */
-  removeProduct(index: number): void {
-    this.price = this.price - this.selectedProducts[index].price * this.selectedProducts[index].quantity;
-    this.selectedProducts.splice(index, 1);
+  removeProduct(productId: number): void {
+    this.price = this.price - this.selectedProducts.get(productId).price * this.selectedProducts.get(productId).quantity;
+    this.selectedProducts.delete(productId);
 
     if (this.price === 0) {
       this.shipping = 0;
@@ -100,24 +87,33 @@ export class PurchaseService {
    * @memberof PurchaseService
    */
   removeZeroProduct(): void {
-    this.selectedProducts = this.selectedProducts.filter((product: IProduct) => product.quantity > 0);
+    let zeroKey: number[] = [];
+    for (let entry of this.selectedProducts.entries()) {
+      if (entry[1].quantity == 0) {
+        zeroKey.push(entry[0]);
+      }
+    }
+
+    for (let i of zeroKey) {
+      this.selectedProducts.delete(i);
+    }
   }
 
   /**
    * 改變產品數量
    * 
-   * @param {number} index - 產品在 array 中的位置
+   * @param {number} productId - 產品的 id
    * @param {number} quantity - 欲改變的數量
    * @memberof PurchaseService
    */
-  changeProductQuantity(index: number, quantity: number): void {
-    let updatedQuantity = this.selectedProducts[index].quantity + quantity
+  changeProductQuantity(productId: number, quantity: number): void {
+    let updatedQuantity = this.selectedProducts.get(productId).quantity + quantity
     if (updatedQuantity < 0) {
       return;
     }
-    
-    this.selectedProducts[index].quantity = updatedQuantity;
-    this.price = this.price + this.selectedProducts[index].price * quantity;
+
+    this.selectedProducts.get(productId).quantity = updatedQuantity;
+    this.price = this.price + this.selectedProducts.get(productId).price * quantity;
     if (this.price === 0) {
       this.shipping = 0;
     }

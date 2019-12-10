@@ -7,27 +7,27 @@
 
       <div class="cart-list">
 
-        <h3 style="text-align:center" *ngIf="selectedProducts.length === 0">您的購物車為空</h3>
+        <h3 style="text-align:center" *ngIf="selectedProducts.size === 0">您的購物車為空</h3>
         
-        <div class="cart-item" *ngFor="let product of selectedProducts; let i = index">
+        <div class="cart-item" *ngFor="let product of selectedProducts | keyvalue">
 
-          <p class="img" [style.backgroundImage]="'url(/assets/images/others/' + product.imageUrl + ')'"></p>
+          <p class="img" [style.backgroundImage]="'url(/assets/images/others/' + product.value.imageUrl + ')'"></p>
 
           <div class="description">
 
             <div class="content">
-              <p>{{ product.name }}</p>
-              <p>{{ product.price | currency: 'TWD' : 'symbol' : '.0' }}</p>
+              <p>{{ product.value.name }}</p>
+              <p>{{ product.value.price | currency: 'TWD' : 'symbol' : '.0' }}</p>
             </div>
 
           </div>
           <p>
-            <span><a href="javascript:;" (click)="changeProductQuantity(i, -1)">-</a></span>
-            <span>{{ product.quantity }}</span>
-            <span><a href="javascript:;" (click)="changeProductQuantity(i, 1)">+</a></span>
+            <span (click)="changeProductQuantity(product.value.id, -1)">-</span>
+            <span>{{ product.value.quantity }}</span>
+            <span (click)="changeProductQuantity(product.value.id, 1)">+</span>
           </p>
-          <p>NT$ {{ product.price * product.quantity }}</p>
-          <p class="desktop"><i class="material-icons"><a href="javascript:;" (click)="removeProduct(i)">delete_outline</a></i></p>
+          <p>NT$ {{ product.value.price * product.value.quantity }}</p>
+          <p class="desktop"><i class="material-icons" (click)="removeProduct(product.value.id)">delete_outline</i></p>
 
         </div>
 
