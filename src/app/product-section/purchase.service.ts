@@ -50,6 +50,8 @@ export class PurchaseService {
         this.selectedProducts.set(p.id, p);
         this.price = this.price + p.price * p.quantity; 
       }
+
+      this.shipping = 300;
     }
   }
 
