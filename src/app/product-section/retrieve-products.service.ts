@@ -9,17 +9,38 @@ import { IProduct } from './product';
   providedIn: 'root'
 })
 export class RetrieveProductsService {
-  /// TODO: 之後改成後端
-  private productUrl = 'assets/products/products.json';
+  // 只有前端使用的 url
+  //private productUrl = 'assets/products/products.json';
+
+  // 接上後端使用的 url
+  private productUrl = 'http://localhost:8080/product';
 
   constructor(private http: HttpClient) { }
+  
+  /** 以下的 methods 給接上後端使用 */
+  
+  getProducts(): Observable<IProduct[]> {
+    return this.http.get<IProduct[]>(this.productUrl + '/all');
+  }
 
+  getProductsByType(type: string): Observable<IProduct[] | undefined> {
+    return this.http.get<IProduct[]>(this.productUrl + `/${type}`);
+  }
+
+  getProduct(id: number): Observable<IProduct | undefined> {
+    return this.http.get<IProduct>(this.productUrl + `?id=${id}`);
+  }
+  
+  /** 以上的 methods 給接上後端使用 */
+  
+  /**   =====================================================================   */
+  
+  /** 以下的 methods 給單純前端使用 */
+  /*
   getProducts(): Observable<IProduct[]> {
     return this.http.get<IProduct[]>(this.productUrl);
   }
 
-  /** 以下的 methods 給單純前端，沒有接上後端使用 */
-  
   getProductsByType(type: string): Observable<IProduct[] | undefined> {
     return this.http.get<IProduct[]>(this.productUrl).pipe(
       map((products: IProduct[]) => products.filter(p => p.type === type))
@@ -31,7 +52,7 @@ export class RetrieveProductsService {
       map((products: IProduct[]) => products.find(p => p.id === id))
     );
   }
-  
-  /** 以上的 methods 給單純前端，沒有接上後端使用 */
+  */
+  /** 以上的 methods 給單純前端使用 */
 
 }
