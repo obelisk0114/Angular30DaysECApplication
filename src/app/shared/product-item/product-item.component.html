@@ -4,7 +4,8 @@
   <p class="font-light-green bg-dark-green" *ngIf="item.type.length">{{ showType(item.type) }}</p>
 
   <div class="img-container">
-      <img [src]="'assets/images/others/' + item.imageUrl" alt="">
+      <img [src]="'assets/images/others/' + item.imageUrl" alt=""
+           (click)="goDetails()">
   </div>
         
   <div class="description font-dark-green">

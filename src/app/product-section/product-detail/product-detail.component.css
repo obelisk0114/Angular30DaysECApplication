@@ -1,0 +1,52 @@
+.card-header {
+    text-align: center;
+    font-size: 28px;
+    padding: 20px;
+}
+
+.card-body {
+    float: left;
+    padding: 20px;
+}
+
+.card-body .img-container {
+    margin-right: 20px;
+    height: 315px;
+    width: 300px;
+    display: inline-block;
+}
+
+.card-body .img-container img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.card-body .information {
+    font-size: 20px;
+    text-align: left;
+    padding: 10px;
+    position: relative;
+    top: -140px;
+    display: inline-block;
+}
+
+.card-body .information .row {
+    margin-bottom: 10px;
+    display: table;
+}
+
+.card-body .information .col {
+    margin-right: 20px;
+    width: 120px;
+    display: table-cell;
+}
+
+.card-body .description {
+    font-size: 16px;
+    padding: 20px;
+}
+
+.card-body .description > p {
+    padding: 5px;
+}

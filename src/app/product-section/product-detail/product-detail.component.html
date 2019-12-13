@@ -1,0 +1,43 @@
+<div class="card" *ngIf='product'>
+    <div class="card-header">
+        {{ pageTitle + ':  ' + product.name }}
+    </div>
+
+    <div class='card-body'>
+        <div class='img-container'>
+            <img [src]="'assets/images/others/' + product.imageUrl"
+                 [title]='product.name'>
+        </div>
+
+        <div class='information'>
+            <div class='row'>
+                <div class='col'>商品名稱：</div>
+                <div class='col'>{{ product.name }}</div>
+            </div>
+            <div class='row'>
+                <div class='col'>商品 ID：</div>
+                <div class='col'>{{ product.id }}</div>
+            </div>
+            <div class='row'>
+                <div class='col'>商品分類：</div>
+                <div class='col'>{{ product.type }}</div>
+            </div>
+            <div class='row'>
+                <div class='col'>商品價格：</div>
+                <div class='col'>{{ product.price }}</div>
+            </div>
+            <div class='row'>
+                <div class='col'>剩餘數量：</div>
+                <div class='col'>{{ product.quantity }}</div>
+            </div>
+        </div>
+
+        <div class='description'>
+            <p style='text-align: center;'>商品描述</p>
+            <p>你說心？你們人類總是輕易的將這個詞掛在嘴邊，彷彿你們對別人的心思瞭若指掌。
+                我的眼睛可以映照出一切，看不見的東西等同不存在，而我一直以此作為基準戰鬥。
+                心，又算什麼東西？只要我撕裂你的胸腔，就能看到你心中的一切嗎？
+                只要我敲碎你的骨頭，就能看透你腦中的所有嗎？</p>
+        </div>
+    </div>
+</div>

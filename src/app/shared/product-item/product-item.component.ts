@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { IProduct, ProductEntity } from '../../product-section/product';
 import { PurchaseService } from '../../product-section/purchase.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-item',
@@ -10,7 +11,8 @@ import { PurchaseService } from '../../product-section/purchase.service';
 export class ProductItemComponent implements OnInit {
   @Input() item: IProduct;
 
-  constructor(private purchaseService: PurchaseService) { }
+  constructor(private purchaseService: PurchaseService,
+              private router: Router) { }
 
   ngOnInit() { }
 
@@ -30,6 +32,10 @@ export class ProductItemComponent implements OnInit {
       }
     }
 
+  }
+
+  goDetails(): void {
+    this.router.navigate(['/products/all', this.item.id]);
   }
 
   showType(type: string): string {
