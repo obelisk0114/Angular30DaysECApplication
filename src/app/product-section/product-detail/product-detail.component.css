@@ -27,7 +27,7 @@
     text-align: left;
     padding: 10px;
     position: relative;
-    top: -140px;
+    top: -100px;
     display: inline-block;
 }
 
@@ -40,6 +40,17 @@
     margin-right: 20px;
     width: 120px;
     display: table-cell;
+}
+
+.card-body button {
+    width: 200px;
+    display: block;
+    font-size: 24px;
+    line-height: 65px;
+    margin-top: 30px;
+    padding: 0px;
+    outline: none;
+    cursor: pointer;
 }
 
 .card-body .description {

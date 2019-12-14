@@ -30,6 +30,11 @@
                 <div class='col'>剩餘數量：</div>
                 <div class='col'>{{ product.quantity }}</div>
             </div>
+
+            <button class="font-dark-green bg-light-green"
+                    (click)="addCart(product)">
+                    加入購物車
+            </button>
         </div>
 
         <div class='description'>
