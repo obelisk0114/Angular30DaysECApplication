@@ -25,19 +25,24 @@ export class ProductDetailComponent implements OnInit {
     });
   }
 
-  addCart(element: IProduct): void {
+  addCart(): void {
     // 這裡和 product-item.component.ts 一樣
-    let decision = prompt(`${element.name}\nNT$ ${element.price}\n\n購買數量`, "1");
+    let decision = prompt(`${this.product.name}\nNT$ ${this.product.price}\n庫存: ${this.product.quantity}\n\n購買數量`, "1");
     let quantity: number = +decision;
     if (quantity > 0) {
-      if (!this.purchaseService.selectedProducts.has(element.id)) {
-        let product: IProduct = new ProductEntity(element.id, element.type, element.name, element.price, element.imageUrl);
+      if (quantity > this.product.quantity) {
+        alert(`庫存不足，目前僅有 ${this.product.quantity}`);
+        return;
+      }
+
+      if (!this.purchaseService.selectedProducts.has(this.product.id)) {
+        let product: IProduct = new ProductEntity(this.product.id, this.product.type, this.product.name, this.product.price, this.product.imageUrl);
         product.quantity = quantity;
-    
-        this.purchaseService.addProduct(product);
+        
+        this.purchaseService.addProduct(product, this.product.quantity);
       }
       else {
-        this.purchaseService.changeProductQuantity(element.id, quantity);
+        this.purchaseService.changeProductQuantity(this.product.id, quantity);
       }
     }
   }

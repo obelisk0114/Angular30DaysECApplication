@@ -16,29 +16,24 @@ export class ProductItemComponent implements OnInit {
 
   ngOnInit() { }
 
-  addCart(element: IProduct): void {
+  addCart(): void {
     // 之後看能不能改成有圖的對話窗
-    let decision = prompt(`${element.name}\nNT$ ${element.price}\n庫存: ${element.quantity}\n\n購買數量`, "1");
+    let decision = prompt(`${this.item.name}\nNT$ ${this.item.price}\n庫存: ${this.item.quantity}\n\n購買數量`, "1");
     let quantity: number = +decision;
     if (quantity > 0) {
-      let max = Number.MAX_SAFE_INTEGER;
-      if (element.quantity) {
-        max = element.quantity;
-      }
-
-      if (quantity > max) {
-        alert(`庫存不足，目前僅有 ${element.quantity}`);
+      if (quantity > this.item.quantity) {
+        alert(`庫存不足，目前僅有 ${this.item.quantity}`);
         return;
       }
 
-      if (!this.purchaseService.selectedProducts.has(element.id)) {
-        let product: IProduct = new ProductEntity(element.id, element.type, element.name, element.price, element.imageUrl);
+      if (!this.purchaseService.selectedProducts.has(this.item.id)) {
+        let product: IProduct = new ProductEntity(this.item.id, this.item.type, this.item.name, this.item.price, this.item.imageUrl);
         product.quantity = quantity;
         
-        this.purchaseService.addProduct(product, element.quantity);
+        this.purchaseService.addProduct(product, this.item.quantity);
       }
       else {
-        this.purchaseService.changeProductQuantity(element.id, quantity);
+        this.purchaseService.changeProductQuantity(this.item.id, quantity);
       }
     }
 
