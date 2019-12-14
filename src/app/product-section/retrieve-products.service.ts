@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { IProduct } from './product';
 
@@ -30,10 +30,18 @@ export class RetrieveProductsService {
   getProduct(id: number): Observable<IProduct | undefined> {
     return this.http.get<IProduct>(this.productUrl + `?id=${id}`);
   }
+
+  /** PUT: update the product on the server */
+  updateProduct(product: IProduct): Observable<IProduct> {
+    let subUrl = '/' + product.id;
+    return this.http.put<IProduct>(this.productUrl + subUrl, product).pipe(
+      tap(_ => console.log(`updated product id = ${product.id}; name: ${product.name}; 
+      type: ${product.type}; quantity: ${product.quantity}; price: ${product.price}`)));
+  }
   
   /** 以上的 methods 給接上後端使用 */
   
-  /**   =====================================================================   */
+  /**   ============================   我是分隔線   ================================   */
   
   /** 以下的 methods 給單純前端使用 */
   /*

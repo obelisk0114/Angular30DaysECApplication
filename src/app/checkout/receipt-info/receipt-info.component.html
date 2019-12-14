@@ -74,5 +74,6 @@
 </form>
 
 <p class="full button">
-    <a [routerLink]="['/', path.success]">確認結帳</a>
+    <a [routerLink]="['/', path.success]"
+       (click)="orderProducts()">確認結帳</a>
 </p>

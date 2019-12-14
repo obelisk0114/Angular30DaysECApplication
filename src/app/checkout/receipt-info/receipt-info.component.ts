@@ -5,6 +5,8 @@ import { appPath } from '../../app-path.const';
 
 // Enum
 import { SendType } from './send-type.enum';
+import { PurchaseService } from '../../product-section/purchase.service';
+import { RetrieveProductsService } from '../../product-section/retrieve-products.service';
 
 @Component({
   selector: 'app-receipt-info',
@@ -34,7 +36,8 @@ export class ReceiptInfoComponent implements OnInit {
    */
   selectedType = SendType.EMAIL;
 
-  constructor() { }
+  constructor(private purchaseService: PurchaseService,
+              private retrieveProductsService: RetrieveProductsService) { }
 
   ngOnInit() {
   }
@@ -58,6 +61,15 @@ export class ReceiptInfoComponent implements OnInit {
    */
   didSelected(type: number): boolean {
     return this.selectedType === type;
+  }
+
+  /// TODO: 過渡時期
+  orderProducts():void {
+    for (let [productId, product] of this.purchaseService.selectedProducts) {
+      let updatedOne = product;
+      updatedOne.quantity = this.purchaseService.available.get(productId) - product.quantity;
+      this.retrieveProductsService.updateProduct(updatedOne).subscribe();
+    }
   }
 
 }

@@ -6,6 +6,7 @@ import { IProduct } from './product';
 })
 export class PurchaseService {
   selectedProducts: Map<number, IProduct> = new Map<number, IProduct>();
+  available: Map<number, number> = new Map();
 
   defaultSelected = [
     {
@@ -49,6 +50,8 @@ export class PurchaseService {
       for (let p of this.defaultSelected) {
         this.selectedProducts.set(p.id, p);
         this.price = this.price + p.price * p.quantity; 
+
+        // 僅為測試保留，沒有儲存庫存量
       }
 
       this.shipping = 300;
@@ -56,13 +59,31 @@ export class PurchaseService {
   }
 
   /**
+   * 儲存剩餘商品數量
+   * 
+   * @param {number} productId - 產品 id
+   * @param {number | undefined} availability - 產品庫存
+   * @memberof PurchaseService
+   */
+  setAvailable(productId: number, availability: number | undefined): void {
+    if (availability) {
+      this.available.set(productId, availability);
+    }
+    else {
+      this.available.set(productId, -1);
+    }
+  }
+
+  /**
    * 加入產品
    * 
    * @param {IProduct} product - 想加入的產品
+   * @param {number | undefined} availability - 產品庫存
    * @memberof PurchaseService
    */
-  addProduct(product: IProduct): void {
+  addProduct(product: IProduct, availability: number | undefined): void {
     this.selectedProducts.set(product.id, product);
+    this.setAvailable(product.id, availability);
     
     this.price = this.price + product.price * product.quantity;
     this.shipping = 300;
@@ -77,6 +98,7 @@ export class PurchaseService {
   removeProduct(productId: number): void {
     this.price = this.price - this.selectedProducts.get(productId).price * this.selectedProducts.get(productId).quantity;
     this.selectedProducts.delete(productId);
+    this.available.delete(productId);
 
     if (this.price === 0) {
       this.shipping = 0;
@@ -98,6 +120,7 @@ export class PurchaseService {
 
     for (let i of zeroKey) {
       this.selectedProducts.delete(i);
+      this.available.delete(i);
     }
   }
 
@@ -108,10 +131,13 @@ export class PurchaseService {
    * @param {number} quantity - 欲改變的數量
    * @memberof PurchaseService
    */
-  changeProductQuantity(productId: number, quantity: number): void {
+  changeProductQuantity(productId: number, quantity: number): boolean {
     let updatedQuantity = this.selectedProducts.get(productId).quantity + quantity
     if (updatedQuantity < 0) {
-      return;
+      return false;
+    }
+    else if (updatedQuantity > this.available.get(productId)) {
+      return false;
     }
 
     this.selectedProducts.get(productId).quantity = updatedQuantity;
@@ -122,5 +148,6 @@ export class PurchaseService {
     else {
       this.shipping = 300;
     }
+    return true;
   }
 }
