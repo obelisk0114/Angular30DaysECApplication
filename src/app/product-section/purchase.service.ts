@@ -75,6 +75,19 @@ export class PurchaseService {
   }
 
   /**
+   * Remove all products 
+   * 
+   * @memberof PurchaseService
+   */
+  cleanSelectedProducts(): void {
+    this.selectedProducts.clear();
+    this.available.clear();
+    
+    this.price = 0;
+    this.shipping = 0;
+  }
+
+  /**
    * 加入產品
    * 
    * @param {IProduct} product - 想加入的產品

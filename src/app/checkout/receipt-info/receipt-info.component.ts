@@ -71,6 +71,8 @@ export class ReceiptInfoComponent implements OnInit {
       productsInCart.push(updatedOne);
     }
     this.retrieveProductsService.updateProducts(productsInCart).subscribe();
+
+    this.purchaseService.cleanSelectedProducts();
   }
 
 }
