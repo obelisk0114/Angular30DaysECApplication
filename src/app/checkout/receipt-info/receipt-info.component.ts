@@ -62,14 +62,15 @@ export class ReceiptInfoComponent implements OnInit {
   didSelected(type: number): boolean {
     return this.selectedType === type;
   }
-
-  /// TODO: 過渡時期
+  
   orderProducts():void {
+    let productsInCart = [];
     for (let [productId, product] of this.purchaseService.selectedProducts) {
       let updatedOne = product;
       updatedOne.quantity = this.purchaseService.available.get(productId) - product.quantity;
-      this.retrieveProductsService.updateProduct(updatedOne).subscribe();
+      productsInCart.push(updatedOne);
     }
+    this.retrieveProductsService.updateProducts(productsInCart).subscribe();
   }
 
 }

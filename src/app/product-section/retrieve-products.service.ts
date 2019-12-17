@@ -9,11 +9,17 @@ import { IProduct } from './product';
   providedIn: 'root'
 })
 export class RetrieveProductsService {
-  // 只有前端使用的 url
-  //private productUrl = 'assets/products/products.json';
 
   // 接上後端使用的 url
-  private productUrl = 'http://localhost:8080/product';
+  private productUrl = 'http://localhost:8080/api/product';
+
+  // http header
+  /** 
+   *  httpOptions = {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+      };
+   *
+   */
 
   constructor(private http: HttpClient) { }
   
@@ -31,7 +37,14 @@ export class RetrieveProductsService {
     return this.http.get<IProduct>(this.productUrl + `?id=${id}`);
   }
 
-  /** PUT: update the product on the server */
+  updateProducts(products: IProduct[]): Observable<IProduct[]> {
+    return this.http.put<IProduct[]>(this.productUrl, products);
+  }
+
+  /** PUT: update the product on the server 
+   * 
+   *  this.http.put(this.productUrl, product, this.httpOptions)
+   */
   updateProduct(product: IProduct): Observable<IProduct> {
     let subUrl = '/' + product.id;
     return this.http.put<IProduct>(this.productUrl + subUrl, product).pipe(
@@ -42,6 +55,9 @@ export class RetrieveProductsService {
   /** 以上的 methods 給接上後端使用 */
   
   /**   ============================   我是分隔線   ================================   */
+
+  // 只有前端使用的 url
+  //private productUrl = 'assets/products/products.json';
   
   /** 以下的 methods 給單純前端使用 */
   /*
