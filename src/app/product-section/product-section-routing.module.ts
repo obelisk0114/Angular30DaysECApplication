@@ -20,7 +20,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'default',
+        redirectTo: 'today',
         pathMatch: 'full'
       }
     ]

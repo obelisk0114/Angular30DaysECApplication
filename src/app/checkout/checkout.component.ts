@@ -16,10 +16,6 @@ export class CheckoutComponent implements OnInit {
   constructor(private purchaseService: PurchaseService) { }
 
   ngOnInit() {
-    if (this.purchaseService.selectedProducts.size === 0) {
-      this.purchaseService.setSelectedProduct();
-    }
-
     this.purchaseService.removeZeroProduct();
     this.selectedProducts = Array.from(this.purchaseService.selectedProducts.values());
 

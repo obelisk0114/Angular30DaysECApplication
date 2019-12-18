@@ -7,57 +7,12 @@ import { IProduct } from './product';
 export class PurchaseService {
   selectedProducts: Map<number, IProduct> = new Map<number, IProduct>();
   available: Map<number, number> = new Map();
-
-  defaultSelected = [
-    {
-      id: 2,
-      type: '',
-      name: '草莓蛋糕',
-      price: 300,
-      imageUrl: 'brenda-godinez-367708-unsplash.jpg',
-      quantity: 2
-    },
-    {
-      id: 7,
-      type: 'today',
-      name: '覆盆子蛋糕',
-      price: 150,
-      imageUrl: 'food-photographer-jennifer-pallian-650641-unsplash.jpg',
-      quantity: 2
-    },
-    {
-      id: 3,
-      type: 'today',
-      name: '綜合莓塔',
-      price: 200,
-      imageUrl: 'brooke-lark-96398-unsplash.jpg',
-      quantity: 2
-    }
-  ];
-
+  
   price = 0;
   shipping = 300;
   
   constructor() { }
-
-  /**
-   * 若 selectedProducts 為空，將預設值賦予它
-   * 
-   * @memberof PurchaseService
-   */
-  setSelectedProduct(): void {
-    if (this.selectedProducts.size === 0) {
-      for (let p of this.defaultSelected) {
-        this.selectedProducts.set(p.id, p);
-        this.price = this.price + p.price * p.quantity; 
-
-        // 僅為測試保留，沒有儲存庫存量
-      }
-
-      this.shipping = 300;
-    }
-  }
-
+  
   /**
    * 儲存剩餘商品數量
    * 

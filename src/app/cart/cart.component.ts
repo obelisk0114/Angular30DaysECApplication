@@ -24,9 +24,6 @@ export class CartComponent implements OnInit {
   constructor(private purchaseService: PurchaseService) { }
 
   ngOnInit() {
-    if (this.purchaseService.selectedProducts.size === 0) {
-      this.purchaseService.setSelectedProduct();
-    }
     this.selectedProducts = this.purchaseService.selectedProducts;
     this.price = this.purchaseService.price;
     this.shipping = this.purchaseService.shipping;

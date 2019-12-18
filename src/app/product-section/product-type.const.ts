@@ -1,8 +1,5 @@
 export const productType = {
-
-    // 預設
-    default: 'default',
-  
+    
     // 所有甜點
     all: 'all',
   

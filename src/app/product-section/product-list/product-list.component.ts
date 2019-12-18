@@ -26,52 +26,6 @@ export class ProductListComponent implements OnInit {
    */
   filteredProduct: IProduct[] = [];
 
-  defaultProducts = [
-    {
-      id: 1,
-      type: 'today',
-      name: '水果優格',
-      price: 150,
-      imageUrl: 'brenda-godinez-228182-unsplash.jpg'
-    },
-    {
-      id: 8,
-      type: 'today',
-      name: '糖衣甜甜圈',
-      price: 50,
-      imageUrl: 'heather-schwartz-493946-unsplash.jpg'
-    },
-    {
-      id: 3,
-      type: 'today',
-      name: '綜合莓塔',
-      price: 200,
-      imageUrl: 'brooke-lark-96398-unsplash.jpg'
-    },
-    {
-      id: 5,
-      type: 'today',
-      name: '肉桂派',
-      price: 120,
-      imageUrl: 'food-photographer-jennifer-pallian-137621-unsplash.jpg'
-    },
-    {
-      id: 7,
-      type: 'today',
-      name: '覆盆子蛋糕',
-      price: 150,
-      imageUrl: 'food-photographer-jennifer-pallian-650641-unsplash.jpg'
-    },
-    {
-      id: 6,
-      type: 'today',
-      name: '草莓冰淇淋',
-      price: 80,
-      imageUrl: 'food-photographer-jennifer-pallian-306895-unsplash.jpg'
-    }
-  ];
-
-  isEmpty = false;       // product list is empty or not
   productPerPage = 6;    // max quantity of products per page
   currentPage = 1;
   pagination: (string | number)[] = [];
@@ -100,24 +54,21 @@ export class ProductListComponent implements OnInit {
             this.router.navigate(['.'], {
               relativeTo: this.route
             });
+            return;
           }
         }
         else {
           this.router.navigate(['.'], {
             relativeTo: this.route
           });
+          return;
         }
       }
       else {
         this.currentPage = 1;
       }
 
-      // 以 "六角學院" 在 product 頁面呈現的 6 張圖做為預設 product，網址為 /products 時使用
-      if (type === this.productType.default) {
-        this.productLists = this.defaultProducts;
-        this.filteredProduct = this.productLists;
-      }
-      else if (type === this.productType.all) {
+      if (type === this.productType.all) {
         this.retrieveProductsService.getProducts().subscribe((productLists) => {
           this.setProductListPage(productLists);
         });
@@ -131,7 +82,7 @@ export class ProductListComponent implements OnInit {
   }
 
   /**
-   * Set productLists, isEmpty
+   * Set productLists
    * 
    * @param {IProduct[]} productLists - used to set productLists property
    * @memberof ProductListComponent 
@@ -140,11 +91,7 @@ export class ProductListComponent implements OnInit {
     this.productLists = productLists;
     this.setFilteredProduct();
 
-    if (this.productLists.length === 0) {
-      this.isEmpty = true;
-    }
-    else {
-      this.isEmpty = false;
+    if (this.productLists.length !== 0) {
       this.setPagination();
     }
   }
@@ -269,9 +216,6 @@ export class ProductListComponent implements OnInit {
       },
       relativeTo: this.route
     });
-
-    this.setFilteredProduct();
-    this.setPagination();
   }
 
   /**
