@@ -43,8 +43,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       errorMessage = `Server returned code: ${err.status}\nerror message is: ${err.message}`;
     }
 
-    window.alert(errorMessage);
     //console.error(errorMessage + " ; " + new Date().toTimeString());
+    console.log(err.error);
+    window.alert(errorMessage);
 
     // return an observable with a user-facing error message
     return throwError(errorMessage);
