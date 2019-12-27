@@ -17,9 +17,14 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       retryWhen(error => {
         let retries = 0;
         return error.pipe(delay(this.delayTime), map(err => {
+          if (err.status === 404) {
+            throw err;
+          }
+
           if (retries++ === this.maxRetry) {
             throw err;
           }
+          
           //console.log(`retry : ${retries} , ` + new Date().toTimeString());
           return err;
         }))
