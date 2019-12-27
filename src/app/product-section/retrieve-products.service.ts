@@ -28,9 +28,17 @@ export class RetrieveProductsService {
   getProducts(): Observable<IProduct[]> {
     return this.http.get<IProduct[]>(this.productUrl + '/all');
   }
-
+  
+  getProductsCount(): Observable<number> {
+    return this.http.get<number>(this.productUrl + '/all/count');
+  }
+  
   getProductsByType(type: string): Observable<IProduct[] | undefined> {
     return this.http.get<IProduct[]>(this.productUrl + `/${type}`);
+  }
+
+  getProductsCountByType(type: string): Observable<number> {
+    return this.http.get<number>(this.productUrl + `/${type}/count`);
   }
 
   getProduct(id: number): Observable<IProduct | undefined> {

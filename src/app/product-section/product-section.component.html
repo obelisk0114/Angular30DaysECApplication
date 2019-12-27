@@ -12,10 +12,10 @@
     <aside>
         <h3 class="bg-dark-green font-light-green">甜點類別</h3>
         <ul class="font-dark-green">
-            <li><a [routerLink]="[productType.all]">所有甜點（48）</a></li>
-            <li><a [routerLink]="[productType.today]">本日精選（10）</a></li>
-            <li><a [routerLink]="[productType.popular]">人氣推薦（26）</a></li>
-            <li><a [routerLink]="[productType.new]">新品上市（12）</a></li>
+            <li><a [routerLink]="[productType.all]">所有甜點（{{ productCount }}）</a></li>
+            <li><a [routerLink]="[productType.today]">本日精選（{{ productTodayCount }}）</a></li>
+            <li><a [routerLink]="[productType.popular]">人氣推薦（{{ productPopularCount }}）</a></li>
+            <li><a [routerLink]="[productType.new]">新品上市（{{ productNewCount }}）</a></li>
         </ul>
     </aside>
     <!-- 甜點類別區域結束 -->
