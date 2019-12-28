@@ -135,30 +135,35 @@ export class ProductListComponent implements OnInit {
         this.pagination.push(i + 1);
       }
     }
+    else if (this.currentPage > lastPage) {
+      this.pagination.push(1);
+      this.pagination.push('...');
+      this.pagination.push(lastPage - 4);
+      this.pagination.push(lastPage - 3);
+      this.pagination.push(lastPage - 2);
+      this.pagination.push(lastPage - 1);
+      this.pagination.push(lastPage);
+    }
     else {
       this.pagination.push(1);
 
       switch (this.currentPage) {
         case 1:   // fall through
         case 2:
-          this.pagination.push(2);
-          this.pagination.push(3);
-          this.pagination.push('...');
-          break
-        case (lastPage - 1):   // fall through
-        case lastPage:
-          this.pagination.push('...');
-          this.pagination.push(lastPage - 2);
-          this.pagination.push(lastPage - 1);
-          break;
         case 3:
+        case 4:
           this.pagination.push(2);
           this.pagination.push(3);
           this.pagination.push(4);
+          this.pagination.push(5);
           this.pagination.push('...');
           break;
+        case (lastPage - 3):   // fall through
         case (lastPage - 2):
+        case (lastPage - 1):
+        case lastPage:
           this.pagination.push('...');
+          this.pagination.push(lastPage - 4);
           this.pagination.push(lastPage - 3);
           this.pagination.push(lastPage - 2);
           this.pagination.push(lastPage - 1);
